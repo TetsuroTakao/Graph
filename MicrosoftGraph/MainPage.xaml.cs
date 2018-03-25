@@ -22,9 +22,39 @@ namespace MicrosoftGraph
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public MainVM ViewModel { get; set; }
         public MainPage()
         {
             this.InitializeComponent();
+            ViewModel = new MainVM();
+            this.Loaded += MainPage_Loaded;
+        }
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (MenuList.Items.Count > 0) MenuList.SelectedIndex = 0;
+        }
+        private void MenuList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox menuListBox = sender as ListBox;
+            MenuContext s = menuListBox.SelectedItem as MenuContext;
+            if (s != null)
+            {
+                ContentsFrame.Navigate(s.Body);
+                //if (Window.Current.Bounds.Width < 640)
+                //{
+                //    Splitter.IsPaneOpen = false;
+                //}
+            }
+        }
+        async void Footer_Click(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(((HyperlinkButton)sender).Tag.ToString()));
+        }
+        private void Hamburger_Click(object sender, RoutedEventArgs e)
+        {
+            Splitter.IsPaneOpen = (Splitter.IsPaneOpen == true) ? false : true;
+            //StatusBorder.Visibility = Visibility.Collapsed;
         }
     }
 }
