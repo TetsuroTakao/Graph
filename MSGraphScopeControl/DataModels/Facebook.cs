@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Security.Authentication.Web;
 
-namespace MicrosoftGraph
+namespace MSGraphScopeControl
 {
     public class Facebook : ProviderBase
     {

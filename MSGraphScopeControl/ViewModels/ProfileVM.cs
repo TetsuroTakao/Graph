@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace MicrosoftGraph
+namespace MSGraphScopeControl
 {
     public class Content:INotifyPropertyChanged
     {

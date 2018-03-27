@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Security.Authentication.Web;
 
-namespace MicrosoftGraph
+namespace MSGraphScopeControl
 {
     public class MSGraph : ProviderBase
     {
@@ -14,7 +14,7 @@ namespace MicrosoftGraph
             Scope = scopeList.ToList<string>();
             tenantType = TenantType.common;
             apiVersion = "v2.0";
-            //App.Current.Resources["ida:ClientID"] = "3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";
+            //App.Current.Resources["ida:ClientID"] = "3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";C:\Repos\Graph\MicrosoftGraph\MSGraphScopeControl\DataModels\MSGraph.cs
             //be6ed449-d477-43c0-a29e-ff74cdce00f9
             //3b2ae2b7-cec6-49e0-b473-e86bae79dc9c
             var client_id = "client_id=3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";

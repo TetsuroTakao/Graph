@@ -1,15 +1,20 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
-using Microsoft.Graph;
-using Microsoft.Identity.Client;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
+using Windows.Security.Authentication.Web;
+using Windows.Security.Authentication.Web.Core;
+using Windows.Security.Credentials;
+using Windows.Storage;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
 
-namespace MicrosoftGraph
+namespace MSGraphScopeControl
 {
     public class AuthenticationHelper
     {
