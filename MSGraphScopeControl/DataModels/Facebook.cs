@@ -17,15 +17,19 @@ namespace MSGraphScopeControl
             scopeParameter += string.Join(",", Scope.Where(s => s == "public_profile" || s == "email"));
             //if OAuth server not support "", use below as redirect URL
             //RedirectURL = "https://www.facebook.com/connect/login_success.html";
-            Uri callBackUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
-            RedirectURL = callBackUri.AbsoluteUri;
+            RedirectURL = "ms-app://s-1-15-2-3170046983-1612372103-299994482-2745324183-4060631390-749960671-3949847874";
+            //Uri callBackUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
+            //RedirectURL = callBackUri.AbsoluteUri;
             OptionalParameters = "&display=popup&response_type=token";
             CurrentProviderTypes = ProviderTypes.FaceBook;
             Public_Profile = new PublicProfile();
+            StateCode = Guid.NewGuid().ToString();
+            var state = "state=" + StateCode;
             //[Obsolete]
 
         }
         string aPIVersion { get; set; }
+        public string StateCode { get; set; }
         string appID { get; set; }
         string scopeParameter { get; set; }
         public string OptionalParameters { get; set; }
@@ -34,6 +38,19 @@ namespace MSGraphScopeControl
             get
             {
                 return "https://www.facebook.com/" + aPIVersion + "/dialog/oauth?client_id=" + Uri.EscapeDataString(appID) + "&redirect_uri=" + Uri.EscapeDataString(RedirectURL) + scopeParameter + OptionalParameters;
+            }
+        }
+
+        public string AccessRequestURL
+        {
+            get
+            {
+                //return "https://graph.facebook.com/v2.12/oauth/access_token?";
+                return "https://graph.facebook.com/" + aPIVersion + "/oauth/access_token?" +
+                "client_id =" + appID +
+                "&redirect_uri =" + Uri.EscapeDataString(RedirectURL) +
+                "& client_secret =" + "4bd88e10bc17aeccdbcf4f3db71e7241";// +
+                //"&code =" + StateCode;
             }
         }
         public string PublicProfileRequestURL

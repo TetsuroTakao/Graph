@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using Windows.Data.Json;
+using Windows.Security.Authentication.Web;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -38,7 +39,7 @@ namespace MSGraphScopeControl
                     redirectURL = (provider as Facebook).RedirectURL;
                     break;
                 case ProviderBase.ProviderTypes.MicrosoftGraph:
-                    oauthURL = (provider as MSGraph).OAuthRequestURL;
+                    oauthURL = (provider as MSGraph).TokenRequestURL;
                     redirectURL = (provider as MSGraph).RedirectURL;
                     break;
                 default:
@@ -67,6 +68,15 @@ namespace MSGraphScopeControl
                         else
                         {
                             result = "Internal Error when creating OAuth client";
+                        }
+                        NotifyUser(result);
+                        break;
+                    case ProviderBase.ProviderTypes.FaceBook:
+                        WebAuthenticationResult WebAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, new Uri((provider as Facebook).AccessRequestURL), EndUri);
+                        if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
+                        {
+                            string aquireTakenResult = WebAuthenticationResult.ResponseData.ToString();
+                            token = "";
                         }
                         NotifyUser(result);
                         break;

@@ -1,18 +1,13 @@
 ﻿//Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
 //See LICENSE in the project root for license information.
 
-using System;
-using System.Diagnostics;
-using System.Net.Http.Headers;
-using System.Net.Http;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Security.Authentication.Web;
-using Windows.Security.Authentication.Web.Core;
-using Windows.Security.Credentials;
-using Windows.Storage;
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace MSGraphScopeControl
 {
@@ -34,6 +29,7 @@ namespace MSGraphScopeControl
         // acquire the token silently. If that fails, then we try to acquire the token by prompting the user.
         public static GraphServiceClient GetAuthenticatedClient()
         {
+
             if (graphClient == null)
             {
                 // Create Microsoft Graph client.

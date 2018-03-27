@@ -25,6 +25,7 @@ namespace MSGraphScopeControl
             //https://login.microsoftonline.com/common/oauth2/nativeclient
             //UWP
             Uri callBackUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
+            //RedirectURL = callBackUri.AbsoluteUri;
             RedirectURL = callBackUri.AbsoluteUri;
 
             OptionalParameters += "&" + RedirectURL;
@@ -45,18 +46,18 @@ namespace MSGraphScopeControl
         public string StateCode { get; set; }
         //string scopeParameter { get; set; }
         public string OptionalParameters { get; set; }
-        public string OAuthRequestURL
+        public string AuthorizeRequestURL
         {
             get
             {
                 return "https://login.microsoftonline.com/" + tenantType.ToString() + "/oauth2/" + apiVersion + "/authorize?" + OptionalParameters;
             }
         }
-        public string PublicProfileRequestURL
+        public string GraphRequestURL
         {
             get
             {
-                return "https://graph.facebook.com/v2.9/me?access_token=" + AccessToken;
+                return "https://graph.microsoft.com/v1.0";
             }
         }
         public string TokenRequestURL

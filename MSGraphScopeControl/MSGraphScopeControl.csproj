@@ -17,7 +17,11 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <PackageCertificateKeyFile>MSGraphScopeControl_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>MSGraphScopeControl_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>F7F614C3009BDC566C1754EAAD57F67B0A4C1558</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -114,6 +118,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="MSGraphScopeControl_StoreKey.pfx" />
     <None Include="MSGraphScopeControl_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +130,7 @@
     <Content Include="Assets\MicrosoftGraphIcon.png" />
     <Content Include="Assets\MSAccountIcon.png" />
     <Content Include="Assets\TwitterIcon.png" />
+    <None Include="Package.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
