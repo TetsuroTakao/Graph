@@ -54,6 +54,8 @@ namespace MSGraphScopeControl
                 switch (provider.CurrentProviderTypes)
                 {
                     case ProviderBase.ProviderTypes.MicrosoftGraph:
+                        var token = AuthenticationHelper.TokenForUser;
+
                         var oAuthClient = AuthenticationHelper.GetAuthenticatedClient();
                         if (oAuthClient != null)
                         {

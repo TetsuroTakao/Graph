@@ -14,7 +14,7 @@ namespace MSGraphScopeControl
             Scope = scopeList.ToList<string>();
             tenantType = TenantType.common;
             apiVersion = "v2.0";
-            //App.Current.Resources["ida:ClientID"] = "3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";C:\Repos\Graph\MicrosoftGraph\MSGraphScopeControl\DataModels\MSGraph.cs
+            //App.Current.Resources["ida:ClientID"] = "3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";
             //be6ed449-d477-43c0-a29e-ff74cdce00f9
             //3b2ae2b7-cec6-49e0-b473-e86bae79dc9c
             var client_id = "client_id=3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";
@@ -59,13 +59,6 @@ namespace MSGraphScopeControl
                 return "https://graph.facebook.com/v2.9/me?access_token=" + AccessToken;
             }
         }
-        //public string UserRequestURL
-        //{
-        //    get
-        //    {
-        //        return "https://graph.facebook.com/v2.9/" + Public_Profile.id + "?access_token=" + AccessToken;
-        //    }
-        //}
         public string TokenRequestURL
         {
             get
