@@ -15,7 +15,7 @@ namespace MicrosoftGraph
         public Content()
         {
             ContentType = ContentTypes.Profile;
-            var except = new string[] { "Undefined", "Goo", "Rakten", "Blogger", "Mixi", "Ameba", "Tumbler", "Reddit", "Yahoo", "Pintarest" };
+            var except = new string[] { "Undefined", "Goo", "Rakten", "Blogger", "Mixi", "Ameba", "Tumbler", "Reddit", "Yahoo", "Pintarest", "OWAccount" };
             ProviderBase tempprovider = null;
             string providerName = string.Empty;
             foreach (ProviderBase.ProviderTypes s in Enum.GetValues(typeof(ProviderBase.ProviderTypes)))
@@ -25,14 +25,18 @@ namespace MicrosoftGraph
                 {
                     case ProviderBase.ProviderTypes.FaceBook:
                         tempprovider = new Facebook();
-                        providerName = Enum.GetName(typeof(ProviderBase.ProviderTypes), s);
-                        tempprovider.Caption = providerName;
-                        tempprovider.SetImage(providerName);
-                        ProviderSelectionList.Add(tempprovider);
+                        break;
+                    case ProviderBase.ProviderTypes.MicrosoftGraph:
+                        tempprovider = new MSGraph();
                         break;
                     default:
+                        tempprovider = new Facebook();
                         break;
                 }
+                providerName = Enum.GetName(typeof(ProviderBase.ProviderTypes), s);
+                tempprovider.Caption = providerName;
+                tempprovider.SetImage(providerName);
+                ProviderSelectionList.Add(tempprovider);
             }
             PropertyChanged += Content_PropertyChanged;
         }

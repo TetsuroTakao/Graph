@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AuthenticationHelper.cs" />
     <Compile Include="DataModels\MSGraph.cs" />
     <Compile Include="DataModels\Facebook.cs" />
     <Compile Include="DataModels\ProviderBase.cs" />
@@ -114,12 +115,14 @@
     <None Include="MicrosoftGraph_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\GraphIcon.png" />
     <Content Include="Assets\FacebookIcon.png" />
     <Content Include="Assets\GoogleIcon.png" />
     <Content Include="Assets\InstagramIcon.png" />
     <Content Include="Assets\LinkedinIcon.png" />
     <Content Include="Assets\AzureActiveDirectoryIcon.png" />
+    <Content Include="Assets\MicrosoftGraphIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\MSAccountIcon.png" />
     <Content Include="Assets\TwitterIcon.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -146,6 +149,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Graph">
+      <Version>1.8.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>1.1.2-preview0008</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>

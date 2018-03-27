@@ -12,43 +12,46 @@ namespace MicrosoftGraph
         public MSGraph()
         {
             // MSA can only use "User.Read", "User.ReadWrite"
-            var scopeList = new string[] { "User.Read", "User.ReadWrite", "User.ReadBasic.All", "User.Read.All", "User.ReadWrite.All", "User.Invite.All", "User.Read.All", "User.ReadWrite.All", "User.Invite.All" };
-
+            var scopeList = new string[] { "User.Read", "User.ReadWrite", "User.ReadBasic.All", "User.Read.All", "User.ReadWrite.All", "User.Invite.All"};
             Scope = scopeList.ToList<string>();
-            appID = "1929285880642177";
-            aPIVersion = "v2.0";
-
-            var client_id = "6731de76 - 14a6 - 49ae - 97bc - 6eba6914391e";
-            var code ="&code = OAAABAAAAiL9Kn2Z27UubvWFPbm0gLWQJVzCTE9UkP3pSx1aXxUjq3n8b2JRLk4OxVXr...";
-            var redirect_uri = "&redirect_uri = http % 3A % 2F % 2Flocalhost % 2Fmyapp % 2F";
-            var grant_type = "&grant_type = authorization_code";
-            // for web app
-            var client_secret = "&client_secret = JqQX2PNo9bpM0uEihUPzyrh";
-
-            scopeParameter = "&scope=";http://blog.processtune.com/wp-admin/plugins.php
-            scopeParameter += string.Join(",", Scope.Where(s => s == "public_profile" || s == "email"));
-            //if OAuth server not support "", use below as redirect URL
-            //RedirectURL = "https://www.facebook.com/connect/login_success.html";
-
+            tenantType = TenantType.common;
+            apiVersion = "v2.0";
+            //App.Current.Resources["ida:ClientID"] = "3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";
+            //be6ed449-d477-43c0-a29e-ff74cdce00f9
+            //3b2ae2b7-cec6-49e0-b473-e86bae79dc9c
+            var client_id = "client_id=3b2ae2b7-cec6-49e0-b473-e86bae79dc9c";
+            OptionalParameters += client_id;
+            var grant_type = "response_type=code";
+            OptionalParameters += "&" + grant_type;
+            //OAuth basic redirect url
+            //https://login.microsoftonline.com/common/oauth2/nativeclient
+            //UWP
             Uri callBackUri = WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
             RedirectURL = callBackUri.AbsoluteUri;
-            OptionalParameters = "&display=popup&response_type=token";
-            CurrentProviderTypes = ProviderTypes.FaceBook;
-            Public_Profile = new PublicProfile();
-            //[Obsolete]
 
+            OptionalParameters += "&" + RedirectURL;
+            var response_mode = "response_mode=query";
+            OptionalParameters += "&" + response_mode;
+            var scopeParameter = "scope = openid offline_access User.Read";
+            OptionalParameters += "&" + scopeParameter;
+
+            StateCode = Guid.NewGuid().ToString();
+            var state = "state=" + StateCode;
+            OptionalParameters += "&" + state;
+            CurrentProviderTypes = ProviderTypes.MicrosoftGraph;
+
+            Public_Profile = new User();
         }
-        string aPIVersion { get; set; }
-        string appID { get; set; }
-        string scopeParameter { get; set; }
+        public DateTimeOffset TokenExpire { get; set; }
+        string apiVersion { get; set; }
+        public string StateCode { get; set; }
+        //string scopeParameter { get; set; }
         public string OptionalParameters { get; set; }
-        //https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-        //https://login.microsoftonline.com/common/oauth2/v2.0/token
         public string OAuthRequestURL
         {
             get
             {
-                return "https://graph.microsoft.com/v2.0/me/";
+                return "https://login.microsoftonline.com/" + tenantType.ToString() + "/oauth2/" + apiVersion + "/authorize?" + OptionalParameters;
             }
         }
         public string PublicProfileRequestURL
@@ -58,17 +61,25 @@ namespace MicrosoftGraph
                 return "https://graph.facebook.com/v2.9/me?access_token=" + AccessToken;
             }
         }
-        public string UserRequestURL
+        //public string UserRequestURL
+        //{
+        //    get
+        //    {
+        //        return "https://graph.facebook.com/v2.9/" + Public_Profile.id + "?access_token=" + AccessToken;
+        //    }
+        //}
+        public string TokenRequestURL
         {
             get
             {
-                return "https://graph.facebook.com/v2.9/" + Public_Profile.id + "?access_token=" + AccessToken;
+                return "https://login.microsoftonline.com/" + tenantType.ToString() + "/oauth2/" + apiVersion + "/token";
             }
         }
+        TenantType tenantType { get; set; }
         public string RedirectURL { get; set; }
         string APIVersionString { get; set; }
         public User FaceBookUserInfo { get; set; }
-        public PublicProfile Public_Profile { get; set; }
+        public User Public_Profile { get; set; }
         public class PublicProfile
         {
             public string id { get; set; }
@@ -135,5 +146,23 @@ namespace MicrosoftGraph
             public string schools { get; set; }
             public string skills { get; set; }
         }
+    }
+    public enum TenantType
+    {
+        common,
+        organizations,
+        consumers,
+        tenantFriendlyName,
+        tenantGUID
+    }
+    [Flags]
+    public enum UserScopeType
+    {
+        Read=1,
+        ReadWrite=2,
+        ReadBasicAll=4,
+        ReadAll=8,
+        ReadWriteAll=16,
+        InviteAll=32
     }
 }

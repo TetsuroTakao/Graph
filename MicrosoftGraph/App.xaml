@@ -4,5 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MicrosoftGraph"
     RequestedTheme="Light">
+    <Application.Resources>
+        <!-- Add your client id here. -->
+        <x:String x:Key="ida:ClientID">3b2ae2b7-cec6-49e0-b473-e86bae79dc9c</x:String>
+        <x:String x:Key="ida:ReturnUrl">urn:ietf:wg:oauth:2.0:oob</x:String>
+    </Application.Resources>
 
 </Application>

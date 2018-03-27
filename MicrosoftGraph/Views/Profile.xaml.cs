@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Identity.Client;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,11 +43,15 @@ namespace MicrosoftGraph
             ProviderBase provider = (SyncDistinationArea.SelectedValue as ProviderBase).CurrentProvider;
             ViewModel.CurrentProvider = provider;
             #region Set provider user selected
-            switch ((SyncDistinationArea.SelectedValue as ProviderBase).CurrentProviderTypes)
+            switch (provider.CurrentProviderTypes)
             {
                 case ProviderBase.ProviderTypes.FaceBook:
                     oauthURL = (provider as Facebook).OAuthRequestURL;
                     redirectURL = (provider as Facebook).RedirectURL;
+                    break;
+                case ProviderBase.ProviderTypes.MicrosoftGraph:
+                    oauthURL = (provider as MSGraph).OAuthRequestURL;
+                    redirectURL = (provider as MSGraph).RedirectURL;
                     break;
                 default:
                     oauthURL = (provider as Facebook).OAuthRequestURL;
@@ -58,40 +63,60 @@ namespace MicrosoftGraph
             {
                 System.Uri StartUri = new Uri(oauthURL);
                 System.Uri EndUri = new Uri(redirectURL);
-                WebAuthenticationResult WebAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, StartUri, EndUri);
-                if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
+                switch (provider.CurrentProviderTypes)
                 {
-                    #region Get access token from request result
-                    string aquireTakenResult = WebAuthenticationResult.ResponseData.ToString();
-                    string responseData = aquireTakenResult.Substring(aquireTakenResult.IndexOf("access_token"));
-                    String[] keyValPairs = responseData.Split('&');
-                    provider.AccessToken = null;
-                    string expires_in = null;
-                    for (int i = 0; i < keyValPairs.Length; i++)
-                    {
-                        String[] splits = keyValPairs[i].Split('=');
-                        switch (splits[0])
+                    case ProviderBase.ProviderTypes.MicrosoftGraph:
+                        var oAuthClient = AuthenticationHelper.GetAuthenticatedClient();
+                        if (oAuthClient != null)
                         {
-                            case "access_token":
-                                provider.AccessToken = splits[1];
-                                break;
-                            case "expires_in":
-                                expires_in = splits[1];
-                                break;
+                            var user = await oAuthClient.Me.Request().GetAsync();
+                            (provider as MSGraph).AccessToken = AuthenticationHelper.TokenForUser;
+                            (provider as MSGraph).TokenExpire = AuthenticationHelper.Expiration;
+                            result = user.GivenName;
                         }
-                    }
-                    #endregion
-                    SetDisplayElements(provider);
-                    NotifyUser(ViewModel.FirstName);
+                        else
+                        {
+                            result = "Internal Error when creating OAuth client";
+                        }
+                        NotifyUser(result);
+                        break;
+                    default:
+                        break;
                 }
-                else if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.ErrorHttp)
-                {
-                    result = "HTTP Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseErrorDetail.ToString();
-                }
-                else
-                {
-                    result = "Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseStatus.ToString();
-                }
+                //WebAuthenticationResult WebAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, StartUri, EndUri);
+                //if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.Success)
+                //{
+                //    #region Get access token from request result
+                //    string aquireTakenResult = WebAuthenticationResult.ResponseData.ToString();
+                //    string responseData = aquireTakenResult.Substring(aquireTakenResult.IndexOf("access_token"));
+                //    String[] keyValPairs = responseData.Split('&');
+                //    provider.AccessToken = null;
+                //    string expires_in = null;
+                //    for (int i = 0; i < keyValPairs.Length; i++)
+                //    {
+                //        String[] splits = keyValPairs[i].Split('=');
+                //        switch (splits[0])
+                //        {
+                //            case "access_token":
+                //                provider.AccessToken = splits[1];
+                //                break;
+                //            case "expires_in":
+                //                expires_in = splits[1];
+                //                break;
+                //        }
+                //    }
+                //    #endregion
+                //    SetDisplayElements(provider);
+                //    NotifyUser(ViewModel.FirstName);
+                //}
+                //else if (WebAuthenticationResult.ResponseStatus == WebAuthenticationStatus.ErrorHttp)
+                //{
+                //    result = "HTTP Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseErrorDetail.ToString();
+                //}
+                //else
+                //{
+                //    result = "Error returned by AuthenticateAsync() : " + WebAuthenticationResult.ResponseStatus.ToString();
+                //}
             }
             catch (Exception Error)
             {
